@@ -1,0 +1,33 @@
+/* 젤큰박스 */
+.box {
+    text-align: center;
+    /*font-family: arial;*/
+    font-size: 24px;
+    margin: 23% 50px 50px 40%;
+    /*margin: 상 우 하 좌 */
+    padding: 17px;
+    width: 330px;
+    outline: solid 2px black;
+}
+
+
+
+/*각 버튼 스타일*/
+.button {
+    color: white;
+    background-color: black;
+    border-radius: 50%;
+}
+
+
+
+
+/* 눈사람 박스 */
+.snowman {
+    width: 320px;
+    /*writing-mode: horizontal-tb;*/
+    color: white;
+    background-color: black;
+    border-radius: 5px;
+    text-align: center;
+}
