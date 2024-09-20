@@ -9,6 +9,8 @@ import Styles from "./sang.module.css";
 
 
 export default function Hoon() {
+    console.log(1);         //콘솔로그를 보면 알 수 있듯이 처음에 두번 랜더링되면서 1이 두번 출력됨. 
+    alert(1);
     const [ct, setCount] = useState(1);
         //ct는 현재 state이고
         //setCount는 setState() 즉 현재 state를 바꾸는 함수인 것같다 .
