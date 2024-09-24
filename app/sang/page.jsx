@@ -10,13 +10,9 @@ import ProgressBar from "../components/progressBar.jsx";
 
 
 
-export default function Hoon() {
-//내 정보 갱신하는 useState. POST mehtod이용해서 my값이 갱신될때마다 서버에 저장해주자.
-    const [my, setCount] = useState(1);
-
-//다른 사람 정보 갱신하는 useState, GetData에서 갱신 
-//여기서 왜 초기값을 지정해줘야지 밑에서 제대로 돌아가는지 모르겠음
-    const [others, setOthersCount] = useState({
+export default function Sang() {
+    const [my, setMy] = useState(1);
+    const [others, setOthers] = useState({
         hoon:{
             progress:1,
             icon: ' '
@@ -36,21 +32,41 @@ export default function Hoon() {
         
     });
 
+
+
+//첫 랜더링시에 서버에서 데이터를 가져와서 (GET API 사용) my와 others를 그 값으로 초기화
+    const SetAll = async () => {
+    //여기랑 아래 set에 const안붙여줘도 error뜨는데 왜지....?
+        const response = await fetch("/api/progress", {
+            method: "GET"
+        });
+        const set = await response.json();
+
+        setMy(set.sang.progress);
+        setOthers(set);
+    }
+    useEffect(() => {
+        SetAll();
+    }, []);
+
+
+
     const AddSnowman = () => {
         if(my < 10) {
-            setCount(my + 1);
-            console.log(my + 1);
+            setMy(my + 1);
+            //console.log(my + 1);
         }
     }
 
+
     const ResetSnowman = () => {
-        setCount(1);
+        setMy(1);
         alert('Reset Snowman');
-        console.log(1);
     }
 
 
-    const GetData = async () => {
+
+    const GetOthers = async () => {
         const response = await fetch("/api/progress", {
             method: "GET"
             //fetch method의 deafult값은 "GET"
@@ -64,21 +80,19 @@ export default function Hoon() {
         **/
         const JsResponse = await response.json();
 
-        console.log(JsResponse);
-        setOthersCount(JsResponse);
+        //console.log(JsResponse);
+        setOthers(JsResponse);
     }
 
+
+
     useEffect(()=>{
-        GetData();
-        console.log("others값 갱신");
+        GetOthers();
+        //console.log("others값 갱신");
     }, [my])
-    /**
-     * useEffect()의 첫번째 인자는 콜백함수 : 수행하고자 하는 작업 (함수)를 넣는다
-     * useEffect()의 두번째 인자는 dependency : 배열안에 검사하고자 하는 값을 넣는다. 빈 배열을 넣으면 처음 페이지가 랜더링 될때 한번 수행
-     */
 
     
-    //bad request
+    
     const PostingData = async () => {
         const post = await fetch("api/progress", {
             method: "POST",
@@ -99,13 +113,16 @@ export default function Hoon() {
              */
         })
         const result = await post.json();
-        console.log(result);
+        //console.log(result);
     }
     useEffect(()=>{
         PostingData();
     }, [my])
 
     
+
+
+
 
     return (
         <div>
