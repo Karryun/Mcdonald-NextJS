@@ -6,20 +6,25 @@ import Post_Data from "./post_data";
 import Styles from "./jake.module.css"
 import { Honk } from "next/font/google";
 
+
 export default function Page(){
-    const [clickNum, setClickNum] = useState(() => {Get_Data().then((data) => {setClickNum(data.jake.progress)})});
+
+    const [clickNum, setClickNum] = useState(0);
+    useEffect(() => {Get_Data().then(data => setClickNum(data.jake.progress))}, []);
+
     const [hoonNum, setHoonNum] = useState(() => {Get_Data().then((data) => {setHoonNum(data.hoon.progress)})});
     const [soheeNum, setSoheeNum] = useState(() => {Get_Data().then((data) => {setSoheeNum(data.sohee.progress)})});
     const [karryunNum, setKarryunNum] = useState(() => {Get_Data().then((data) => {setKarryunNum(data.karryun.progress)})});
     const [sangNum, setSangNum] = useState(() => {Get_Data().then((data) => {setSangNum(data.sang.progress)})});
-    useEffect(() => {Post_Data(clickNum)}, [clickNum]);
+
     
     return (
         <div>
 
             <button onClick = {() => {
               if (clickNum < 10) {
-                setClickNum(clickNum + 1);
+                setClickNum((clickNum) => clickNum + 1);
+                Post_Data(clickNum + 1);
               }
             }}>
                 장풍!
@@ -28,6 +33,7 @@ export default function Page(){
             <div>
             {"🍃".repeat(clickNum)}
             </div>
+
 
             <div>
               <button onClick = {() => {
@@ -63,6 +69,10 @@ export default function Page(){
               {"⛄".repeat(sangNum)}
               </div>
             </div>
+
+            
+
+
 
         </div>
     )
