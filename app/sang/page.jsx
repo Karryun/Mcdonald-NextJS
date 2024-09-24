@@ -4,58 +4,157 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Link from "next/link";
 import Styles from "./sang.module.css";
+import Components from "../components/progressBar.jsx";
+import ProgressBar from "../components/progressBar.jsx";
 
 
 
 
-export default function Hoon() {
-    console.log(1);         //콘솔로그를 보면 알 수 있듯이 처음에 두번 랜더링되면서 1이 두번 출력됨. 
-    alert(1);
-    const [ct, setCount] = useState(1);
-        //ct는 현재 state이고
-        //setCount는 setState() 즉 현재 state를 바꾸는 함수인 것같다 .
-        //setCount는 
+export default function Sang() {
+    const [my, setMy] = useState(1);
+    const [others, setOthers] = useState({
+        hoon:{
+            progress:1,
+            icon: ' '
+        },
+        jake:{
+            progress:1,
+            icon: ' ',
+        },
+        karryun:{
+            'progress':1,
+            'icon': ' '
+        },
+        sohee:{
+            progress:1,
+            icon: ' '
+        }
+        
+    });
+
+
+
+//첫 랜더링시에 서버에서 데이터를 가져와서 (GET API 사용) my와 others를 그 값으로 초기화
+    const SetAll = async () => {
+    //여기랑 아래 set에 const안붙여줘도 error뜨는데 왜지....?
+        const response = await fetch("/api/progress", {
+            method: "GET"
+        });
+        const set = await response.json();
+
+        setMy(set.sang.progress);
+        setOthers(set);
+    }
+    useEffect(() => {
+        SetAll();
+    }, []);
+
+
 
     const AddSnowman = () => {
-        if(ct < 10) {
-            setCount(ct + 1);
-                //이때 괄호안의 값을 ct++이케 하면 컴파일 에러가 뜬다.
-                //이걸로 유추해보아 const [ct, setCount]에서 setCount()의 작동방식은
-                //괄호안의 값에 해당하는 변수를 새로 선언하고(그 변수를 위한 메모리를 새로 할당)
-                //ct가 가리키는 곳을 새로 선언한 변수로 향하게 한다.
-            console.log(ct + 1);
+        if(my < 10) {
+            setMy(my + 1);
+            //console.log(my + 1);
         }
     }
 
+
     const ResetSnowman = () => {
-        setCount(1);
+        setMy(1);
         alert('Reset Snowman');
-        console.log(1);
     }
 
+
+
+    const GetOthers = async () => {
+        const response = await fetch("/api/progress", {
+            method: "GET"
+            //fetch method의 deafult값은 "GET"
+            //async는 해당 함수가 비동기 함수임을 나타냄.
+            //await은 이전 promise가 완료(fulfilled든지 rejected든지)될때까지 기다리라는 뜻
+        });
+        /** 
+        그냥 response.json()하면 에러남 
+            -> API이용해서 데이터를 불러오기 전까지 response는 텅빈 객체임
+            -> 따라서 await을 이용해서 위의 fetch()가 완료될때까지 기다려 줘야함
+        **/
+        const JsResponse = await response.json();
+
+        //console.log(JsResponse);
+        setOthers(JsResponse);
+    }
+
+
+
+    useEffect(()=>{
+        GetOthers();
+        //console.log("others값 갱신");
+    }, [my])
+
+    
+    
+    const PostingData = async () => {
+        const post = await fetch("api/progress", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                "name": "sang",
+                "progress": my
+            })
+            /**
+             * 처음에 body를 
+             * body: {
+             *   "name": "sang",
+             *   "progress": my
+             * }  이렇게 했는데 500-internal server error가 뜸.
+             * 왜 그렇게 됐는지 생각해보기
+             */
+        })
+        const result = await post.json();
+        //console.log(result);
+    }
+    useEffect(()=>{
+        PostingData();
+    }, [my])
+
+    
+
+
+
+
     return (
-        <div className={Styles.box}>
-            <button 
-                onClick={AddSnowman}
-                className={Styles.button}>
-                snowman
-            </button>
-            <div
-                className={Styles.snowman}>
-                    {'☃️'.repeat(ct)}
+        <div>
+            <div className={Styles.mybox}>
+                <button 
+                    onClick={AddSnowman}
+                    className={Styles.button}>
+                    snowman
+                </button>
+                <div 
+                    className={Styles.snowman}>
+                        {'☃️'.repeat(my)}
+                </div>
+                <button 
+                    onClick={ResetSnowman}
+                    className={Styles.button}>
+                    Reset
+                </button>
+                <button
+                    className={Styles.button}>
+                    <Link href = "/" style={{color:"white"}}>
+                        Home
+                    </Link>
+                </button>
             </div>
-            <button 
-                onClick={ResetSnowman}
-                className={Styles.button}>
-                Reset
-            </button>
-            <button
-                className={Styles.button}>
-                <Link href = "/" style={{color:"white"}}>
-                    Home
-                </Link>
-            </button>
-            
+
+            <div className={Styles.otherbox}>
+                <ProgressBar name="hoon" icon={others.hoon.icon} count={others.hoon.progress}/>
+                <ProgressBar name="jake" icon={others.jake.icon} count={others.jake.progress}/>
+                <ProgressBar name="karryun" icon={others.karryun.icon} count={others.karryun.progress}/>
+                <ProgressBar name="sohee" icon={others.sohee.icon} count={others.sohee.progress}/>
+            </div>
         </div>
     )
 }
