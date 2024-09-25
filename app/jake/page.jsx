@@ -38,6 +38,7 @@ export default function Page(){
             <div>
               <button onClick = {() => {
               setClickNum(1);
+              Post_Data(1)
               }}>
               Reset
               </button>
