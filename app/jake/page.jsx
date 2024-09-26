@@ -1,78 +1,66 @@
 "use client"
 import { useState , useEffect } from "react";
 import Link from "next/link";
-import Get_Data from "./get_data";
 import Post_Data from "./post_data";
-import Styles from "./jake.module.css"
-import { Honk } from "next/font/google";
+import ProgressBar from "../components/ProgressBar";
 
 
 export default function Page(){
 
-    const [clickNum, setClickNum] = useState(0);
-    useEffect(() => {Get_Data().then(data => setClickNum(data.jake.progress))}, []);
+    const [jake, setJake] = useState({progress:0, icon:""});
+    const [hoon, setHoon] = useState({progress:0, icon:""});
+    const [sohee, setSohee] = useState({progress:0, icon:""});
+    const [karryun, setKarryun] = useState({progress:0, icon:""});
+    const [sang, setSang] = useState({progress:0, icon:""});
 
-    const [hoonNum, setHoonNum] = useState(() => {Get_Data().then((data) => {setHoonNum(data.hoon.progress)})});
-    const [soheeNum, setSoheeNum] = useState(() => {Get_Data().then((data) => {setSoheeNum(data.sohee.progress)})});
-    const [karryunNum, setKarryunNum] = useState(() => {Get_Data().then((data) => {setKarryunNum(data.karryun.progress)})});
-    const [sangNum, setSangNum] = useState(() => {Get_Data().then((data) => {setSangNum(data.sang.progress)})});
+    useEffect(() => {
+      async function initialize() {
+        const total_data = await fetch("../api/progress", {method:"GET"});
+        const total_json = await total_data.json();
+        setJake((prevState) => {return {...prevState, progress:total_json.jake.progress, icon:total_json.jake.icon}});
+        setHoon((prevState) => {return {...prevState, progress:total_json.hoon.progress, icon:total_json.hoon.icon}});
+        setSohee((prevState) => {return {...prevState, progress:total_json.sohee.progress, icon:total_json.sohee.icon}});
+        setKarryun((prevState) => {return {...prevState, progress:total_json.karryun.progress, icon:total_json.karryun.icon}});
+        setSang((prevState) => {return {...prevState, progress:total_json.sang.progress, icon:total_json.sang.icon}});
+        
+      }
+      initialize();
+    }, []);
+    
+
+    
 
     
     return (
         <div>
 
             <button onClick = {() => {
-              if (clickNum < 10) {
-                setClickNum((clickNum) => clickNum + 1);
-                Post_Data(clickNum + 1);
+              if (jake.progress < 10) {
+                setJake((prevState) => {return {...prevState, progress:(jake.progress + 1), icon:jake.icon}});
+                Post_Data(jake.progress + 1);
               }
             }}>
                 장풍!
             </button>
 
-            <div>
-            {"🍃".repeat(clickNum)}
-            </div>
-
-
-            <div>
+            
               <button onClick = {() => {
-              setClickNum(1);
+              setJake((prevState) => {return {...prevState, progress:1, icon:jake.icon}});
               Post_Data(1)
               }}>
               Reset
               </button>
               <Link href = "/">Home</Link>
-            </div>
+
+            <ProgressBar name = "jake" icon = {jake.icon} count = {jake.progress}></ProgressBar>
 
 
-            <div className={Styles.Container}>
-              이동훈
-              <div>
-              {"🍹".repeat(hoonNum)}
-              </div>
-            </div>
-            <div className={Styles.Container}>
-              안소희
-              <div>🍫
-              {"🍫".repeat(soheeNum)}
-              </div>
-            </div>
-            <div className={Styles.Container}>
-              곽도연
-              <div>
-              {"🦀".repeat(karryunNum)}
-              </div>
-            </div>
-            <div className={Styles.Container}>
-              박상훈
-              <div>
-              {"⛄".repeat(sangNum)}
-              </div>
-            </div>
-
-            
-
+            <div>
+              <ProgressBar name="hoon" icon={hoon.icon} count = {hoon.progress}></ProgressBar> 
+              <ProgressBar name="sohee" icon={sohee.icon} count = {sohee.progress}></ProgressBar> 
+              <ProgressBar name="karryun" icon={karryun.icon} count = {karryun.progress}></ProgressBar> 
+              <ProgressBar name="sang" icon={sang.icon} count = {sang.progress}></ProgressBar> 
+            </div> 
 
 
         </div>
