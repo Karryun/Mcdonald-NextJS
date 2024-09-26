@@ -1,40 +1,68 @@
 "use client"
-import { useState } from "react";
-import Jangpoong from "./jangpoong";
+import { useState , useEffect } from "react";
+import Link from "next/link";
+import Post_Data from "./post_data";
+import ProgressBar from "../components/ProgressBar";
+
 
 export default function Page(){
-    const [clickNum, setClickNum] = useState([0])
-    return (
-        <div style = {{
-            display: 'flex',
-            flexDirection: 'column'
 
-        }}>
+    const [jake, setJake] = useState({progress:0, icon:""});
+    const [hoon, setHoon] = useState({progress:0, icon:""});
+    const [sohee, setSohee] = useState({progress:0, icon:""});
+    const [karryun, setKarryun] = useState({progress:0, icon:""});
+    const [sang, setSang] = useState({progress:0, icon:""});
+
+    useEffect(() => {
+      async function initialize() {
+        const total_data = await fetch("../api/progress", {method:"GET"});
+        const total_json = await total_data.json();
+        setJake((prevState) => {return {...prevState, progress:total_json.jake.progress, icon:total_json.jake.icon}});
+        setHoon((prevState) => {return {...prevState, progress:total_json.hoon.progress, icon:total_json.hoon.icon}});
+        setSohee((prevState) => {return {...prevState, progress:total_json.sohee.progress, icon:total_json.sohee.icon}});
+        setKarryun((prevState) => {return {...prevState, progress:total_json.karryun.progress, icon:total_json.karryun.icon}});
+        setSang((prevState) => {return {...prevState, progress:total_json.sang.progress, icon:total_json.sang.icon}});
+        
+      }
+      initialize();
+    }, []);
+    
+
+    
+
+    
+    return (
+        <div>
+
             <button onClick = {() => {
-              if (clickNum.length < 8)
-                setClickNum([...clickNum, 1]);
+              if (jake.progress < 10) {
+                setJake((prevState) => {return {...prevState, progress:(jake.progress + 1), icon:jake.icon}});
+                Post_Data(jake.progress + 1);
+              }
             }}>
                 장풍!
             </button>
 
-            <div style = {{
-            display: 'flex',
-            flexDirection: 'row'
-        }}>
-          {clickNum.map((val, idx) => {
-          return (<Jangpoong key={idx} />)
-      })}</div>
-
-            <div style = {{
-            display: 'flex',
-            flexDirection: 'row'}}>
+            
               <button onClick = {() => {
-              setClickNum([]);
-            }}>
+              setJake((prevState) => {return {...prevState, progress:1, icon:jake.icon}});
+              Post_Data(1)
+              }}>
               Reset
-            </button>
-            <a href = "/">Home</a>
-            </div>
+              </button>
+              <Link href = "/">Home</Link>
+
+            <ProgressBar name = "jake" icon = {jake.icon} count = {jake.progress}></ProgressBar>
+
+
+            <div>
+              <ProgressBar name="hoon" icon={hoon.icon} count = {hoon.progress}></ProgressBar> 
+              <ProgressBar name="sohee" icon={sohee.icon} count = {sohee.progress}></ProgressBar> 
+              <ProgressBar name="karryun" icon={karryun.icon} count = {karryun.progress}></ProgressBar> 
+              <ProgressBar name="sang" icon={sang.icon} count = {sang.progress}></ProgressBar> 
+            </div> 
+
+
         </div>
     )
 }
