@@ -38,7 +38,7 @@ export default function Dice() {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      fontSize: '200px',
+      fontSize: '600px',
       fontWeight: '900',
       flexDirection: 'column',
     }}>
