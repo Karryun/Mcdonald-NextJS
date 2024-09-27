@@ -5,8 +5,31 @@ import { useState } from "react"
 export default function Dice() {
   const [dice, setDice] = useState(1);
 
-  const diceRoller = () => {
-    setDice(Math.ceil(Math.random() * 6));
+  const diceRoller = async () => {
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 50);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 100);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 150);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 200);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 250);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 300);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 350);
+    setTimeout(() => {
+      setDice(Math.ceil(Math.random() * 6));
+    }, 400);
   }
   return (
     <div style={{
