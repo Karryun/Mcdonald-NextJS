@@ -13,15 +13,17 @@ export default function Page(){
     const [karryun, setKarryun] = useState({progress:0, icon:""});
     const [sang, setSang] = useState({progress:0, icon:""});
     const [text, setText] = useState("없어요");
+    const [tempText, setTempText] = useState("");
     const clicked = () => {
       axios.get("http://127.0.0.1:8000/polls/get/", {
         params: {
           abc:tempText,
         },
       })
-      .then((response) => setText(JSON.stringify(response.data)));
+      .then((response) => setText(JSON.stringify(response.data)))
+      .then(() => {setTempText("")});
     }
-    const [tempText, setTempText] = useState("");
+    
     const onChange = (e) => {
       setTempText(e.target.value);
     }
@@ -76,7 +78,7 @@ export default function Page(){
             </div> 
         
         <div>
-          <input id="myText" type="text" onChange={onChange}/>
+          <input id="myText" type="text" onChange={onChange} value={tempText}/>
           <button onClick = {clicked}>너굴 버튼</button>
           <h1>{text}</h1>
         </div>
