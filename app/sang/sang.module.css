@@ -1,12 +1,13 @@
 /* 젤큰박스 */
-.box {
+.mybox {
     text-align: center;
+    align-items: center;
     /*font-family: arial;*/
-    font-size: 24px;
-    margin: 23% 50px 50px 40%;
+    font-size: 25px;
+    margin: 10% 50px 50px 40%;
     /*margin: 상 우 하 좌 */
-    padding: 17px;
-    width: 330px;
+    padding: 20px;
+    width: 360px;
     outline: solid 2px black;
 }
 
@@ -17,6 +18,7 @@
     color: white;
     background-color: black;
     border-radius: 50%;
+    font-size: 22px;
 }
 
 
@@ -24,10 +26,27 @@
 
 /* 눈사람 박스 */
 .snowman {
-    width: 320px;
+    width: 360px;
     /*writing-mode: horizontal-tb;*/
     color: white;
     background-color: black;
     border-radius: 5px;
     text-align: center;
 }
+
+
+/* 다른 사람 게이지 */
+.otherbox {
+    width: 800px;
+    color : white;
+    background-color: black;
+    margin-top: 150px;
+    margin-left: 460px;
+    /*margin : 상 우 하 좌 */
+    padding: 20px;
+    border-radius: 20px;
+}
+
+
+
+/*맘에 든 색깔 : cornflowerblue*/
