@@ -1,9 +1,9 @@
 "use client"
-import { useState , useEffect } from "react";
+import React, { useState , useEffect } from "react";
 import Link from "next/link";
 import Post_Data from "./post_data";
 import ProgressBar from "../components/ProgressBar";
-
+import axios from "axios";
 
 export default function Page(){
 
@@ -12,6 +12,21 @@ export default function Page(){
     const [sohee, setSohee] = useState({progress:0, icon:""});
     const [karryun, setKarryun] = useState({progress:0, icon:""});
     const [sang, setSang] = useState({progress:0, icon:""});
+    const [text, setText] = useState("없어요");
+    const [tempText, setTempText] = useState("");
+    const clicked = () => {
+      axios.get("http://127.0.0.1:8000/polls/get/", {
+        params: {
+          abc:tempText,
+        },
+      })
+      .then((response) => setText(JSON.stringify(response.data)))
+      .then(() => {setTempText("")});
+    }
+    
+    const onChange = (e) => {
+      setTempText(e.target.value);
+    }
 
     useEffect(() => {
       async function initialize() {
@@ -61,8 +76,15 @@ export default function Page(){
               <ProgressBar name="karryun" icon={karryun.icon} count = {karryun.progress}></ProgressBar> 
               <ProgressBar name="sang" icon={sang.icon} count = {sang.progress}></ProgressBar> 
             </div> 
-
+        
+        <div>
+          <input id="myText" type="text" onChange={onChange} value={tempText}/>
+          <button onClick = {clicked}>너굴 버튼</button>
+          <h1>{text}</h1>
+        </div>
+        
 
         </div>
+    
     )
 }
