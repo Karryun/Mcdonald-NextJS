@@ -26,6 +26,9 @@ export default function Hoon() {
     }
   });
 
+  const [racoonText, setRacoonText] = useState("");
+  const [racoonLength, setRacoonLength] = useState(0);
+
   const dataFetcher = async () => {
     const res = await fetch('/api/progress', {
       method: 'GET',
@@ -42,6 +45,13 @@ export default function Hoon() {
   useEffect(()=>{
     dataFetcher();
   },[]);
+
+  const racoonHandler = async () => {
+    const res = await fetch(`http://127.0.0.1:8000/polls/postapi?text=${racoonText}`);
+    const resText = await res.json();
+    console.log(resText);
+    setRacoonLength(resText);
+  }
 
   return (
     <div className={Styles.Container}>
@@ -65,6 +75,14 @@ export default function Hoon() {
       <ProgressBar name='karryun' icon={peopleData.karryun.icon} count={peopleData.karryun.progress} />
       <ProgressBar name='sang' icon={peopleData.sang.icon} count={peopleData.sang.progress} />
       <ProgressBar name='sohee' icon={peopleData.sohee.icon} count={peopleData.sohee.progress} />
+
+      <div className={Styles.Racoon}>
+        <input value={racoonText} onChange={(e) => setRacoonText(e.target.value)}/>
+        <button onClick={racoonHandler}>너굴버튼</button>
+      </div>
+      <h1>
+        {racoonLength}
+      </h1>
     </div>
   )
 }
