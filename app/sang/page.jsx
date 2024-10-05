@@ -6,6 +6,7 @@ import Link from "next/link";
 import Styles from "./sang.module.css";
 import Components from "../components/progressBar.jsx";
 import ProgressBar from "../components/progressBar.jsx";
+import axios from 'axios'
 
 
 
@@ -119,7 +120,23 @@ export default function Sang() {
         PostingData();
     }, [my])
 
-    
+//여기서 부터 붙여 넣은 거
+    const [text, setText] = useState("없어요");
+    const [tempText, setTempText] = useState("");
+    const clicked = () => {
+      axios.get("http://127.0.0.1:8000/polls/get/", {
+        params: {
+          abc:tempText,
+        },
+      })
+      .then((response) => setText(JSON.stringify(response.data)))
+      .then(() => {setTempText("")});
+    }
+
+    const onChange = (e) => {
+      setTempText(e.target.value);
+    }
+//여기까지 붙여 넣은 거
 
 
 
@@ -154,6 +171,12 @@ export default function Sang() {
                 <ProgressBar name="jake" icon={others.jake.icon} count={others.jake.progress}/>
                 <ProgressBar name="karryun" icon={others.karryun.icon} count={others.karryun.progress}/>
                 <ProgressBar name="sohee" icon={others.sohee.icon} count={others.sohee.progress}/>
+            </div>
+
+            <div>
+                <input id="myText" type="text" onChange={onChange} value={tempText}/>
+                <button onClick = {clicked}>눈사람</button>
+                <h1>{text}</h1>
             </div>
         </div>
     )
