@@ -15,12 +15,10 @@ export default function Page(){
     const [text, setText] = useState("없어요");
     const [tempText, setTempText] = useState("");
     const clicked = () => {
-      axios.get("http://127.0.0.1:8000/polls/get/", {
-        params: {
-          abc:tempText,
-        },
+      axios.post("http://127.0.0.1:8000/polls/post/", {
+          "text":tempText,
       })
-      .then((response) => setText(JSON.stringify(response.data)))
+      .then((response) => setText(JSON.stringify(response.data.id)))
       .then(() => {setTempText("")});
     }
     
