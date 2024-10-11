@@ -41,12 +41,36 @@
     color : white;
     background-color: black;
     margin-top: 150px;
-    margin-left: 460px;
+    margin-left: 350px;
     /*margin : 상 우 하 좌 */
     padding: 20px;
     border-radius: 20px;
 }
 
+.textbox {
+    width: 200px;
+    color : white;
+    background-color: black;
+    margin-top: 90px;
+    margin-left: 600px;
+    /*margin : 상 우 하 좌 */
+    padding: 20px;
+    border-radius: 20px;
+}
 
+.idbox {
+    width: 200px;
+    color : white;
+    background-color: black;
+    margin-top: 90px;
+    margin-left: 600px;
+    /*margin : 상 우 하 좌 */
+    padding: 30px;
+    border-radius: 20px;
+}
+
+.button {
+    padding: 10px;
+}
 
 /*맘에 든 색깔 : cornflowerblue*/

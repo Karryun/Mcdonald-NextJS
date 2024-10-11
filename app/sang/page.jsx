@@ -126,7 +126,7 @@ export default function Sang() {
     const clicked = () => {
       axios.get("http://127.0.0.1:8000/polls/get/", {
         params: {
-          abc:tempText,
+          'abc':tempText,
         },
       })
       .then((response) => setText(JSON.stringify(response.data)))
@@ -140,6 +140,49 @@ export default function Sang() {
 
 
 
+
+//2024/10/9/수/DRF이용해서 GET API만든거 실험해보는 코드 - fetch
+/**
+ * 1. 숫자 입력하는 박스랑 버튼 만들기
+ * 2. 숫자 입력하고 버튼 클릭하면 get api호출 - fetch()이용
+ * 3. respone받은거 console에 출력
+ */
+
+/* fetch()로 get써볼라다가 실패함, axios로 도전해보기
+const [id, setId] = useState(10);
+const GetQuestion = async () => {
+    const response = await fetch("http://127.0.0.1:8000/polls/api-get/", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: {
+            "id": id
+        }
+    }
+    )
+    const JsResponse = await response.json();
+    console.log(JsResponse);
+}
+*/ 
+
+    //2024/10/9/수/DRF이용해서 GET API만든거 실험해보는 코드 - axios
+    const [id, setId] = useState(11);
+    const GetQuestion = async () => {
+        try{
+            const response = await axios.get("http://127.0.0.1:8000/polls/api-get/", {
+                method: "GET",
+                params: {
+                    'id': id
+                },
+            })
+            console.log(response.data)
+        } catch(err) {
+            alert("error")
+        }
+    }
+    GetQuestion();
+    
 
     return (
         <div>
@@ -173,11 +216,12 @@ export default function Sang() {
                 <ProgressBar name="sohee" icon={others.sohee.icon} count={others.sohee.progress}/>
             </div>
 
-            <div>
+            <div className={Styles.textbox}>
                 <input id="myText" type="text" onChange={onChange} value={tempText}/>
                 <button onClick = {clicked}>눈사람</button>
                 <h1>{text}</h1>
             </div>
+
         </div>
     )
 }
