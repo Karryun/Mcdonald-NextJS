@@ -37,7 +37,6 @@ export default function Sang() {
 
 //첫 랜더링시에 서버에서 데이터를 가져와서 (GET API 사용) my와 others를 그 값으로 초기화
     const SetAll = async () => {
-    //여기랑 아래 set에 const안붙여줘도 error뜨는데 왜지....?
         const response = await fetch("/api/progress", {
             method: "GET"
         });
@@ -74,11 +73,11 @@ export default function Sang() {
             //async는 해당 함수가 비동기 함수임을 나타냄.
             //await은 이전 promise가 완료(fulfilled든지 rejected든지)될때까지 기다리라는 뜻
         });
-        /** 
-        그냥 response.json()하면 에러남 
-            -> API이용해서 데이터를 불러오기 전까지 response는 텅빈 객체임
-            -> 따라서 await을 이용해서 위의 fetch()가 완료될때까지 기다려 줘야함
-        **/
+/** 
+그냥 response.json()하면 에러남 
+    -> API이용해서 데이터를 불러오기 전까지 response는 텅빈 객체임
+    -> 따라서 await을 이용해서 위의 fetch()가 완료될때까지 기다려 줘야함
+**/
         const JsResponse = await response.json();
 
         //console.log(JsResponse);
@@ -120,7 +119,9 @@ export default function Sang() {
         PostingData();
     }, [my])
 
-//여기서 부터 붙여 넣은 거
+
+
+//여기서 부터 붙여 넣은 거 => django-react API 통신
     const [text, setText] = useState("없어요");
     const [tempText, setTempText] = useState("");
     const clicked = () => {
@@ -137,6 +138,7 @@ export default function Sang() {
       setTempText(e.target.value);
     }
 //여기까지 붙여 넣은 거
+
 
 
 
@@ -166,23 +168,28 @@ const GetQuestion = async () => {
 }
 */ 
 
+
+
     //2024/10/9/수/DRF이용해서 GET API만든거 실험해보는 코드 - axios
-    const [id, setId] = useState(11);
+    const [drfResult, setDrfResult] = useState(0)
+    const [status, setStatus] = useState('none')
+    const [id, setId] = useState(24);
     const GetQuestion = async () => {
-        try{
             const response = await axios.get("http://127.0.0.1:8000/polls/api-get/", {
                 method: "GET",
                 params: {
                     'id': id
                 },
             })
-            console.log(response.data)
-        } catch(err) {
-            alert("error")
-        }
+            setDrfResult(response.data.length)
+            setStatus(response.status)
+            console.log(drfResult)
+            console.log(response.status)
     }
     GetQuestion();
-    
+     
+
+
 
     return (
         <div>
@@ -222,6 +229,10 @@ const GetQuestion = async () => {
                 <h1>{text}</h1>
             </div>
 
+            <div className={Styles.otherbox}>
+                <h4>DRF GET요청 결과 : {drfResult}</h4> <br></br>
+                <h4>DRF GET요청 status : {status}</h4>
+            </div>
         </div>
     )
 }
